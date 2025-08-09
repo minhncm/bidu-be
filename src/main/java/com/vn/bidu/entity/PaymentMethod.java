@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Entity
 @Getter
 @Setter
@@ -21,6 +23,7 @@ public class PaymentMethod {
     @Column(name= "name_payment")
     private String namePayment;
 
-    @OneToOne(mappedBy = "paymentMethod")
-    private Order order;
+    @OneToMany(mappedBy = "paymentMethod")
+    private Set<Order> orders;
+
 }

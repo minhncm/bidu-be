@@ -31,7 +31,7 @@ public class Order {
     @JoinColumn(name = "id_user" , insertable = false, updatable = false)
     private User user;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "paymentMethod_id", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "id_payment_method", insertable = false, updatable = false)
     private PaymentMethod paymentMethod;
 }
