@@ -34,7 +34,7 @@ public class Product {
     private int soldQuantity;
 
     @Column(name = "description_product")
-    private int descriptionProduct;
+    private String descriptionProduct;
 
     @ManyToOne
     @JoinColumn(name = "id_shop" , insertable = false, updatable = false)
