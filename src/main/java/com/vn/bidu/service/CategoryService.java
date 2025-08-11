@@ -1,4 +1,4 @@
 package com.vn.bidu.service;
 
-public interface CategoryService {
+public class CategoryService {
 }
