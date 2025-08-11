@@ -1,15 +1,13 @@
 package com.vn.bidu.entity;
 
 
-import com.vn.bidu.custom.Gender;
-import com.vn.bidu.custom.Role;
+import com.vn.bidu.enums.Gender;
+import com.vn.bidu.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 import java.util.Set;
 

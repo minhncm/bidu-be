@@ -1,12 +1,11 @@
-package com.vn.bidu.dto;
+package com.vn.bidu.dto.response;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class ShopDTO {
+public class ShopResponse {
     private int id;
     private String nameShop;
     private String avatar;
