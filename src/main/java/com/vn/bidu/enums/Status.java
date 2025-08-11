@@ -1,4 +1,4 @@
-package com.vn.bidu.custom;
+package com.vn.bidu.enums;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

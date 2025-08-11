@@ -1,7 +1,7 @@
 package com.vn.bidu.service.impl;
 
 import com.vn.bidu.converter.ShopConverter;
-import com.vn.bidu.dto.ShopDTO;
+import com.vn.bidu.dto.response.ShopResponse;
 import com.vn.bidu.entity.Shop;
 import com.vn.bidu.repository.ShopRepository;
 import com.vn.bidu.service.ShopService;
@@ -19,13 +19,19 @@ public class ShopServiceImpl implements ShopService {
     @Autowired
     private ShopConverter shopConverter;
     @Override
-    public List<ShopDTO> getAllShop() {
+    public List<ShopResponse> getAllShop() {
         List<Shop> shops = shopRepository.findAll();
-        List<ShopDTO> shopDTOs = new ArrayList<>();
+        List<ShopResponse> shopResponses = new ArrayList<>();
         for(Shop shop : shops) {
-            ShopDTO shopDTO = shopConverter.toShopDTO(shop);
-            shopDTOs.add(shopDTO);
+            ShopResponse shopResponse = shopConverter.toShopDTO(shop);
+            shopResponses.add(shopResponse);
         }
-        return shopDTOs;
+        return shopResponses;
+    }
+
+    @Override
+    public ShopResponse getShopById(int id) {
+        Shop shop = shopRepository.findById(id).orElseThrow(() -> new RuntimeException("Shop not found"));
+        return shopConverter.toShopDTO(shop);
     }
 }

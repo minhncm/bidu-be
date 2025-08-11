@@ -1,6 +1,6 @@
 package com.vn.bidu.entity;
 
-import com.vn.bidu.custom.Status;
+import com.vn.bidu.enums.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
