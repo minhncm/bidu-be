@@ -27,19 +27,25 @@ public class CategoryServiceImpl implements CategoryService {
     public List<CategoryResponse> getAllCategory() {
         List<Category> categories = categoryRepository.findAll();
         List<CategoryResponse>  categoryResponseList = new ArrayList<>();
-
         for(Category category : categories){
             CategoryResponse categoryResponse = categoryConverter.toCategoryResponse(category);
             categoryResponseList.add(categoryResponse);
         }
         return categoryResponseList;
     }
-
     @Override
     public CategoryResponse getById(int id) {
-
         Category category = categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Category not found"));
         return categoryConverter.toCategoryResponse(category);
-
+    }
+    @Override
+    public void deleteCategory(int id) {
+        Optional<Category> category = categoryRepository.findById(id);
+        if(category.isPresent()){
+            categoryRepository.deleteById(id);
+        }
+        else{
+            throw new RuntimeException("Category not found");
+        }
     }
 }
