@@ -5,8 +5,13 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/bidu
     username: root
-    password: 123456
+    password: minh071205
   jpa:
     hibernate:
       ddl-auto: update
+
+cloudinary:
+  cloud-name: dzrhf1hwk
+  api-key: 252239671882344
+  api-secret: TUSE_ajDGgftHMcQPvWxXokNA7I
 

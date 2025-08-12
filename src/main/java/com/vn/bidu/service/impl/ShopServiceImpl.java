@@ -50,17 +50,11 @@ public class ShopServiceImpl implements ShopService {
                     .thumbnail(shopRequest.getThumbnail())
                     .location(shopRequest.getLocation()).build();
             shopRepository.save(shop);
-
             return true;
 
         } catch (Exception e) {
-            return false;
+            throw new RuntimeException("Add shop failure");
         }
-
-
-
-
-
 
     }
 
