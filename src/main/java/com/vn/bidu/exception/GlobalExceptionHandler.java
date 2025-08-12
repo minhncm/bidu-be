@@ -1,6 +1,8 @@
 package com.vn.bidu.exception;
 
 import com.vn.bidu.dto.response.ErrorResponse;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

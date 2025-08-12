@@ -1,8 +1,6 @@
 package com.vn.bidu.dto.response;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
@@ -14,14 +12,9 @@ public class ResponseData<T> implements Serializable {
     private String message;
     private T data;
 
-    public ResponseData (int status, String message, T data) {
+    public ResponseData(int status, String message, T data) {
         this.status = status;
         this.message = message;
         this.data = data;
-    }
-
-    public ResponseData (int status, String message) {
-        this.status = status;
-        this.message = message;
     }
 }
