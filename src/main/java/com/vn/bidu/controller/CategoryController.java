@@ -7,10 +7,7 @@ import com.vn.bidu.entity.Category;
 import com.vn.bidu.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,7 +27,12 @@ public class CategoryController {
     @GetMapping("/{id}")
     public ResponseData<CategoryResponse> getCategoryById(@PathVariable int id) {
         return new ResponseData<CategoryResponse>(HttpStatus.OK.value(),"ok",  categoryService.getById(id) );
+    }
 
+    @DeleteMapping("/delete/{id}")
+    public ResponseData<Boolean> deleteCategory(@PathVariable int id) {
+        categoryService.deleteCategory(id);
+        return new ResponseData<Boolean>(HttpStatus.OK.value(),"Delete success",  true );
     }
 
 }

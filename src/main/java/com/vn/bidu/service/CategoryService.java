@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface  CategoryService {
     List<CategoryResponse> getAllCategory();
     CategoryResponse getById(int id);
+    void deleteCategory(int id);
 }
