@@ -1,17 +1,14 @@
 package com.vn.bidu.dto.request;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ShopRequest {
-
     private String nameShop;
     private String avatar;
     private String thumbnail;

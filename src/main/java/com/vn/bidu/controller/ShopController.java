@@ -1,9 +1,12 @@
 package com.vn.bidu.controller;
 
+import com.cloudinary.api.ApiResponse;
+import com.vn.bidu.constant.CloudPath;
 import com.vn.bidu.dto.request.ShopRequest;
 import com.vn.bidu.dto.response.ResponseData;
 import com.vn.bidu.dto.response.ShopResponse;
 import com.vn.bidu.entity.Shop;
+import com.vn.bidu.service.CloudinaryService;
 import com.vn.bidu.service.ShopService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,13 +15,15 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/shop")
+@RequestMapping("/shops")
 public class ShopController {
 
     private final ShopService shopService;
+    private final CloudinaryService cloudinaryService;
     @GetMapping
     public List<ShopResponse> getAllShop() {
         return shopService.getAllShop();
@@ -30,11 +35,24 @@ public class ShopController {
     }
 
     @PostMapping("/add-shop")
-    public ResponseEntity<?> addShop(@RequestParam String nameShop, @RequestParam MultipartFile avatar, @RequestParam MultipartFile thumbnail, @RequestParam String email, @RequestParam String phoneNumber, @RequestParam String location){
+    public ResponseData<Boolean> addShop(@RequestParam("name_shop") String nameShop,
+                                     @RequestParam("avatar") MultipartFile avatar,
+                                     @RequestParam("thumbnail") MultipartFile thumbnail,
+                                     @RequestParam("email") String email,
+                                     @RequestParam("phone_number") String phoneNumber,
+                                     @RequestParam("location") String location){
 
+        Map uploadThumbnail = cloudinaryService.uploadFile(thumbnail, CloudPath.SHOP);
+        Map uploadAvatar = cloudinaryService.uploadFile(avatar, CloudPath.SHOP);
+        ShopRequest shopRequest = ShopRequest.builder()
+                .nameShop(nameShop)
+                .avatar(uploadAvatar.get("url").toString())
+                .thumbnail(uploadThumbnail.get("url").toString())
+                .email(email)
+                .phoneNumber(phoneNumber)
+                .location(location).build();
 
-
-        return null;
+        return new ResponseData<>(HttpStatus.OK.value(), "success", shopService.addShop(shopRequest));
     }
 
     @DeleteMapping("/delete/{id}")
@@ -42,7 +60,7 @@ public class ShopController {
 
         shopService.deleteShop(id);
 
-        return new ResponseData<Boolean>(HttpStatus.OK.value(),"Delete success", true );
+        return new ResponseData<>(HttpStatus.OK.value(),"Delete success", true );
     }
 
 }
