@@ -3,9 +3,12 @@ package com.vn.bidu.dto.response;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+import java.util.List;
+
 @Getter
 @Setter
-public class ShopResponse {
+public class ShopResponse implements Serializable {
     private int id;
     private String nameShop;
     private String avatar;

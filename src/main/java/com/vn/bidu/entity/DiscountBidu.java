@@ -12,8 +12,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "discount")
-public class Discount {
+@Table(name = "discount_bidu")
+public class DiscountBidu {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,13 +22,16 @@ public class Discount {
     @Column(name = "name_discount")
     private String nameDiscount;
 
-    @Column(name = "percent")
-    private double percent;
+    @Column(name = "price")
+    private int price;
+
+    @Column(name="image")
+    private String image;
 
     @Column(name = "description_discount")
     private String descriptionDiscount;
 
     @ManyToOne
-    @JoinColumn(name= "id_shop", insertable = false, updatable = false)
-    private Shop shop;
+    @JoinColumn(name= "id_product", insertable = false, updatable = false)
+    private Product product;
 }

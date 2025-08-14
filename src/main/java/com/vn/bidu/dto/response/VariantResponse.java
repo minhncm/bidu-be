@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SizeColorResponse {
+public class VariantResponse {
     private int id;
     private String color;
     private String size;
