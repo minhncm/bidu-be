@@ -5,7 +5,11 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/bidu
     username: root
+<<<<<<< HEAD
     password: minh071205
+=======
+    password: Song161105@
+>>>>>>> 56102eb6ed7baa79f9f9e02dd6c784921ee4b16d
   jpa:
     hibernate:
       ddl-auto: update

@@ -43,8 +43,5 @@ public class Shop {
     private String location;
 
     @OneToMany(mappedBy = "shop")
-    private Set<Discount> listDiscount;
-
-    @OneToMany(mappedBy = "shop")
     private Set<Product> listProduct;
 }

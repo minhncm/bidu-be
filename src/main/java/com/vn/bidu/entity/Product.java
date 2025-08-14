@@ -30,11 +30,44 @@ public class Product {
     @Column(name = "price")
     private int price;
 
+    @Column(name="percent")
+    private int percent;
+
     @Column(name = "sold_quantity")
     private int soldQuantity;
 
     @Column(name = "description_product")
     private String descriptionProduct;
+
+    @Column(name="material")
+    private String material;
+
+    @Column(name="origin")
+    private String origin;
+
+    @Column(name="style")
+    private String style;
+
+    @Column(name="vignette")
+    private String vignette;
+
+    @Column(name="collar")
+    private String collar;
+
+    @Column(name="season")
+    private String season;
+
+    @Column(name="body_shape")
+    private String bodyShape;
+
+    @Column(name="gender")
+    private String gender;
+
+    @Column(name="brand")
+    private String brand;
+
+    @OneToMany(mappedBy = "product")
+    private Set<DiscountBidu> listDiscount;
 
     @ManyToOne
     @JoinColumn(name = "id_shop" , insertable = false, updatable = false)
@@ -45,7 +78,7 @@ public class Product {
     private Category category;
 
     @OneToMany(mappedBy = "product")
-    private Set<SizeColor> listSizeColor;
+    private Set<Variant> listVariant;
 
     @OneToMany(mappedBy = "product")
     private Set<OrderDetail> listOrderDetail;

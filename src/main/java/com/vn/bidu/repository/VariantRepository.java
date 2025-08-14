@@ -1,9 +1,9 @@
 package com.vn.bidu.repository;
 
-import com.vn.bidu.entity.SizeColor;
+import com.vn.bidu.entity.Variant;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface SizeColorRepository extends JpaRepository<SizeColor, Integer> {
+public interface VariantRepository extends JpaRepository<Variant, Integer> {
 }
