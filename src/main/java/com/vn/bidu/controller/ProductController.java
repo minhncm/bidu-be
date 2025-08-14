@@ -19,13 +19,13 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public List<ProductResponse> getAllProduct(){
-        return productService.getAllProduct();
+    public ResponseData<List<ProductResponse>> getAllProduct(){
+        return new ResponseData<List<ProductResponse>>(HttpStatus.OK.value(),"Product retrieved successfully",productService.getAllProduct());
     }
 
     @GetMapping("/{id}")
     public ResponseData<ProductResponse> getProductById(@PathVariable int id) {
-        return new ResponseData<ProductResponse>(HttpStatus.OK.value(),"ok", productService.getProductById(id));
+        return new ResponseData<ProductResponse>(HttpStatus.OK.value(),"Product retrieved successfully", productService.getProductById(id));
     }
 
     @DeleteMapping("/delete/{id}")
