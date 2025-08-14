@@ -1,7 +1,6 @@
 package com.vn.bidu.controller;
 
-import com.vn.bidu.dto.response.PaymentMethodResponse;
-import com.vn.bidu.dto.response.ProductResponse;
+
 import com.vn.bidu.dto.response.ResponseData;
 import com.vn.bidu.dto.response.SizeColorResponse;
 import com.vn.bidu.service.SizeColorService;

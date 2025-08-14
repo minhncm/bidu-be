@@ -57,9 +57,7 @@ public class ShopController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseData<Boolean> deleteShop( @PathVariable int id){
-
         shopService.deleteShop(id);
-
         return new ResponseData<>(HttpStatus.OK.value(),"Delete success", true );
     }
 
