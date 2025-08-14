@@ -60,7 +60,6 @@ public class ShopServiceImpl implements ShopService {
 
     @Override
     public void deleteShop(int id) {
-
        Optional<Shop> shop = shopRepository.findById(id);
        if(shop.isPresent()){
            shopRepository.deleteById(id);

@@ -3,6 +3,7 @@ package com.vn.bidu.controller;
 import com.cloudinary.api.ApiResponse;
 import com.vn.bidu.constant.CloudPath;
 import com.vn.bidu.dto.request.ShopRequest;
+import com.vn.bidu.dto.response.PaymentMethodResponse;
 import com.vn.bidu.dto.response.ResponseData;
 import com.vn.bidu.dto.response.ShopResponse;
 import com.vn.bidu.entity.Shop;
@@ -25,13 +26,13 @@ public class ShopController {
     private final ShopService shopService;
     private final CloudinaryService cloudinaryService;
     @GetMapping
-    public List<ShopResponse> getAllShop() {
-        return shopService.getAllShop();
+    public ResponseData<List<ShopResponse>> getAllShop() {
+        return new ResponseData<List<ShopResponse>>(HttpStatus.OK.value(),"Shop retrieved successfully", shopService.getAllShop());
     }
 
     @GetMapping("/{id}")
-    public ShopResponse getShopById(@PathVariable int id) {
-        return shopService.getShopById(id);
+    public ResponseData<ShopResponse> getShopById(@PathVariable int id) {
+        return new ResponseData<ShopResponse>(HttpStatus.OK.value(),"Shop retrieved successfully", shopService.getShopById(id));
     }
 
     @PostMapping("/add-shop")
