@@ -3,13 +3,20 @@ package com.vn.bidu.dto.response;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+import java.util.List;
+
 @Getter
 @Setter
-public class ProductResponse {
+
+public class ProductResponse implements Serializable  {
+
     private int id;
     private String nameProduct;
-    private String thumbnail;
-    private int price;
+    private List<String> thumbnail;
+    private String price;
+    private String discountPrice;
+    private String percent;
     private int soldQuantity;
     private String descriptionProduct;
     private String material;
@@ -22,4 +29,7 @@ public class ProductResponse {
     private String gender;
     private String brand;
     private int rating;
+    private ShopResponse shop;
+    private List<DiscountBiduResponse> discount;
+    private List<VariantResponse> listVariant;
 }

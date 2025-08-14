@@ -11,8 +11,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "size_color")
-public class SizeColor {
+@Table(name = "variant")
+public class Variant {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,12 +21,12 @@ public class SizeColor {
     @Column(name= "color")
     private String color;
 
+    @Column(name="size")
+    private String size;
+
     @Column(name= "inventory")
     private int inventory;
 
-    @ManyToOne
-    @JoinColumn(name = "id_size" , insertable = false, updatable = false)
-    private Size size;
 
     @ManyToOne
     @JoinColumn(name = "id_product" , insertable = false, updatable = false)

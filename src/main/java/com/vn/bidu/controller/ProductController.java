@@ -13,24 +13,24 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/product")
+@RequestMapping("/products")
 public class ProductController {
 
     private final ProductService productService;
 
     @GetMapping
     public ResponseData<List<ProductResponse>> getAllProduct(){
-        return new ResponseData<List<ProductResponse>>(HttpStatus.OK.value(),"Product retrieved successfully",productService.getAllProduct());
+        return new ResponseData<>(HttpStatus.OK.value(),"Product retrieved successfully",productService.getAllProduct());
     }
 
     @GetMapping("/{id}")
     public ResponseData<ProductResponse> getProductById(@PathVariable int id) {
-        return new ResponseData<ProductResponse>(HttpStatus.OK.value(),"Product retrieved successfully", productService.getProductById(id));
+        return new ResponseData<>(HttpStatus.OK.value(),"Product retrieved successfully", productService.getProductById(id));
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseData<Boolean> deleteProduct(@PathVariable int id){
         productService.deleteProduct(id);
-        return new ResponseData<Boolean>(HttpStatus.OK.value(),"Delete success",  true );
+        return new ResponseData<>(HttpStatus.OK.value(),"Delete success",  true );
     }
 }
