@@ -20,13 +20,13 @@ public class CategoryController {
     @GetMapping()
     public ResponseData<List<CategoryResponse>> getAllCategory(){
 
-        return new ResponseData<List<CategoryResponse>>(HttpStatus.OK.value(),"Add success",  categoryService.getAllCategory() );
+        return new ResponseData<List<CategoryResponse>>(HttpStatus.OK.value(),"Category retrieved successfully",  categoryService.getAllCategory() );
     }
 
 
     @GetMapping("/{id}")
     public ResponseData<CategoryResponse> getCategoryById(@PathVariable int id) {
-        return new ResponseData<CategoryResponse>(HttpStatus.OK.value(),"ok",  categoryService.getById(id) );
+        return new ResponseData<CategoryResponse>(HttpStatus.OK.value(),"Category retrieved successfully",  categoryService.getById(id) );
     }
 
     @DeleteMapping("/delete/{id}")

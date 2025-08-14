@@ -53,7 +53,7 @@ public class PaymentMethodServiceImpl implements PaymentMethodService {
 
             return true;
         } catch (Exception e) {
-             throw new RuntimeException("không tạddudduwoccj ");
+             throw new RuntimeException("Not create");
         }
 
     }
