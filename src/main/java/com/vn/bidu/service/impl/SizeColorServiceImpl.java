@@ -35,7 +35,8 @@ public class SizeColorServiceImpl implements SizeColorService {
 
     @Override
     public SizeColorResponse getSizeColorById(int id) {
-        SizeColor sizeColor = sizeColorRepository.findById(id).orElseThrow(() -> new RuntimeException("Size Color not found"));
+        SizeColor sizeColor = sizeColorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Size Color not found"));
         return sizeColorConverter.toSizeColorResponse(sizeColor);
     }
 }
