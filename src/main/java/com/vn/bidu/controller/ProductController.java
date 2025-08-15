@@ -58,33 +58,31 @@ public class ProductController {
                                               @RequestParam String gender,
                                               @RequestParam String brand){
 
-       // Lưu URL ảnh vào list
        List<String> urls = new ArrayList<>();
        for (MultipartFile file : images) {
            Map cloud = cloudinaryService.uploadFile(file, CloudPath.PRODUCT);
            urls.add((String) cloud.get("url"));
        }
 
-       // Nối thành chuỗi, ngăn cách bằng ", "
        String thumbnail = String.join(", ", urls);
 
-       ProductRequest productRequest = new ProductRequest();
-       productRequest.setNameProduct(nameProduct);
-       productRequest.setThumbnail(thumbnail);
-       productRequest.setPrice(price);
-       productRequest.setPercent(percent);
-       productRequest.setSoldQuantity(soldQuantity);
-       productRequest.setDescriptionProduct(descriptionProduct);
-       productRequest.setMaterial(material);
-       productRequest.setOrigin(origin);
-       productRequest.setStyle(style);
-       productRequest.setVignette(vignette);
-       productRequest.setCollar(collar);
-       productRequest.setSeason(season);
-       productRequest.setBodyShape(bodyShape);
-       productRequest.setGender(gender);
-       productRequest.setBrand(brand);
-
+       ProductRequest productRequest = ProductRequest.builder()
+               .nameProduct(nameProduct)
+               .thumbnail(thumbnail)
+               .price(price)
+               .percent(percent)
+               .soldQuantity(soldQuantity)
+               .descriptionProduct(descriptionProduct)
+               .material(material)
+               .origin(origin)
+               .style(style)
+               .vignette(vignette)
+               .collar(collar)
+               .season(season)
+               .bodyShape(bodyShape)
+               .gender(gender)
+               .brand(brand)
+               .build();
 
        return new ResponseData<>(HttpStatus.OK.value(),"Product retrieved successfully",
                productService.updateProduct(id, productRequest));
