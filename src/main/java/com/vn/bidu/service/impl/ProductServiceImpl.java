@@ -2,6 +2,7 @@ package com.vn.bidu.service.impl;
 
 import com.vn.bidu.converter.CategoryConverter;
 import com.vn.bidu.converter.ProductConverter;
+import com.vn.bidu.dto.request.ProductRequest;
 import com.vn.bidu.dto.response.ProductResponse;
 import com.vn.bidu.entity.Product;
 import com.vn.bidu.repository.ProductRepository;
@@ -37,6 +38,23 @@ public class ProductServiceImpl implements ProductService {
     public ProductResponse getProductById(int id) {
         Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
         return productConverter.toProductResponse(product);
+    }
+
+    @Override
+    public boolean updateProduct(int id, ProductRequest productRequest) {
+
+        Optional<Product> product = productRepository.findById(id);
+
+        if(product.isPresent()){
+            Product newProduct =  productConverter.toProductEntity(productRequest, product.get());
+
+            productRepository.save(newProduct);
+
+            return true;
+        }else{
+            throw new RuntimeException("Product not found");
+        }
+
     }
 
     @Override
