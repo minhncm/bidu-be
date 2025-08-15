@@ -1,6 +1,8 @@
 package com.vn.bidu.converter;
 
+import com.vn.bidu.dto.request.ProductRequest;
 import com.vn.bidu.dto.response.ProductResponse;
+import com.vn.bidu.dto.response.ShopResponse;
 import com.vn.bidu.entity.Product;
 import com.vn.bidu.utils.ListUtils;
 import com.vn.bidu.utils.NumberFormatUtils;
@@ -14,6 +16,12 @@ public class ProductConverter {
     @Autowired
     private ModelMapper mapper;
 
+
+    public Product toProductEntity(ProductRequest productRequest, Product product){
+
+        mapper.map(productRequest, product);
+        return product;
+    }
 
     public ProductResponse toProductResponse(Product product) {
         ProductResponse productResponse = mapper.map(product, ProductResponse.class);
