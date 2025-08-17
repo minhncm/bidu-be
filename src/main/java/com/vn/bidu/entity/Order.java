@@ -24,7 +24,7 @@ public class Order {
     @Column(name= "status")
     private Status status;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private Set<OrderDetail> listOrderDetail;
 
     @ManyToOne

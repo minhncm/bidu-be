@@ -2,10 +2,7 @@ package com.vn.bidu.entity;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Set;
 
@@ -14,6 +11,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Table(name = "product")
 public class Product {
 
@@ -66,7 +64,7 @@ public class Product {
     @Column(name="brand")
     private String brand;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<DiscountBidu> listDiscount;
 
     @ManyToOne
@@ -77,10 +75,10 @@ public class Product {
     @JoinColumn(name = "id_category" , insertable = false, updatable = false)
     private Category category;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<Variant> listVariant;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<OrderDetail> listOrderDetail;
 
 }

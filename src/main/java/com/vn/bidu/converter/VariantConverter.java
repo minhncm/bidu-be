@@ -1,5 +1,6 @@
 package com.vn.bidu.converter;
 
+import com.vn.bidu.dto.request.VariantRequest;
 import com.vn.bidu.dto.response.VariantResponse;
 import com.vn.bidu.entity.Variant;
 import org.modelmapper.ModelMapper;
@@ -10,6 +11,10 @@ import org.springframework.stereotype.Component;
 public class VariantConverter {
     @Autowired
     private ModelMapper mapper;
+
+    public Variant toVariantEntity(VariantRequest variantRequest) {
+        return mapper.map(variantRequest, Variant.class);
+    }
 
     public VariantResponse toVariantResponse(Variant variant) {
         return mapper.map(variant, VariantResponse.class);
