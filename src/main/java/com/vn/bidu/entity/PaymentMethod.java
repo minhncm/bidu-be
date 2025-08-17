@@ -23,7 +23,7 @@ public class PaymentMethod {
     @Column(name= "name_payment")
     private String namePayment;
 
-    @OneToMany(mappedBy = "paymentMethod")
+    @OneToMany(mappedBy = "paymentMethod", cascade = CascadeType.ALL)
     private Set<Order> orders;
 
 }

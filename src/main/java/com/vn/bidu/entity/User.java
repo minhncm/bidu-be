@@ -41,9 +41,9 @@ public class User {
     @Column(name = "phone_number")
     private String phone;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Order> listOrder;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<DeliveryLocation> listDeliveryLocation;
 }

@@ -64,7 +64,7 @@ public class Product {
     @Column(name="brand")
     private String brand;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<DiscountBidu> listDiscount;
 
     @ManyToOne
@@ -75,10 +75,10 @@ public class Product {
     @JoinColumn(name = "id_category" , insertable = false, updatable = false)
     private Category category;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<Variant> listVariant;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<OrderDetail> listOrderDetail;
 
 }
