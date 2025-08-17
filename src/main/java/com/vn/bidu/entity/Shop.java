@@ -42,6 +42,6 @@ public class Shop {
     @Column(name = "location")
     private String location;
 
-    @OneToMany(mappedBy = "shop")
+    @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL)
     private Set<Product> listProduct;
 }

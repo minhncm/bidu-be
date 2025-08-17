@@ -110,6 +110,7 @@ public class ProductServiceImpl implements ProductService {
                 productRepository.save(product);
                 return true;
             } catch(Exception e){
+                e.printStackTrace();
                 return false;
             }
         }
