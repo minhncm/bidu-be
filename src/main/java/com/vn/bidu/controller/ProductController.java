@@ -32,7 +32,6 @@ public class ProductController {
 
     private final CloudinaryService cloudinaryService;
 
-
     @GetMapping
     public ResponseData<List<ProductResponse>> getAllProduct(){
         return new ResponseData<>(HttpStatus.OK.value(),"Product retrieved successfully",productService.getAllProduct());
@@ -46,58 +45,20 @@ public class ProductController {
     @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseData<Boolean> createProduct(@RequestPart("productRequest") ProductRequest productRequest, @RequestPart("images") List<MultipartFile> images) {
 
-
-
         productRequest.setThumbnail(cloudinaryService.getUrlFile(images, CloudPath.PRODUCT));
-
 
         return new ResponseData<>(HttpStatus.OK.value(),"Product add successfully",
                 productService.createProduct(productRequest));
     }
 
+    @PutMapping( value = "/update/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+   public ResponseData<Boolean> updateProduct(@PathVariable int id,@RequestPart("productRequest") ProductRequest productRequest, @RequestPart("images") List<MultipartFile> images){
 
-   @PutMapping("/update/{id}")
-   public ResponseData<Boolean> updateProduct(@PathVariable int id, @RequestParam String nameProduct,
-                                              @RequestParam List<MultipartFile> images,
-                                              @RequestParam int price,
-                                              @RequestParam int percent,
-                                              @RequestParam int soldQuantity,
-                                              @RequestParam String descriptionProduct,
-                                              @RequestParam String material,
-                                              @RequestParam String origin,
-                                              @RequestParam String style,
-                                              @RequestParam String vignette,
-                                              @RequestParam String collar,
-                                              @RequestParam String season,
-                                              @RequestParam String bodyShape,
-                                              @RequestParam String gender,
-                                              @RequestParam String brand){
-
-
-
-       ProductRequest productRequest = ProductRequest.builder()
-               .nameProduct(nameProduct)
-               .thumbnail(cloudinaryService.getUrlFile(images, CloudPath.SHOP))
-               .price(price)
-               .percent(percent)
-               .soldQuantity(soldQuantity)
-               .descriptionProduct(descriptionProduct)
-               .material(material)
-               .origin(origin)
-               .style(style)
-               .vignette(vignette)
-               .collar(collar)
-               .season(season)
-               .bodyShape(bodyShape)
-               .gender(gender)
-               .brand(brand)
-               .build();
+       productRequest.setThumbnail(cloudinaryService.getUrlFile(images, CloudPath.PRODUCT));
 
        return new ResponseData<>(HttpStatus.OK.value(),"Product retrieved successfully",
                productService.updateProduct(id, productRequest));
    }
-
-
 
     @DeleteMapping("/delete/{id}")
     public ResponseData<Boolean> deleteProduct(@PathVariable int id){
