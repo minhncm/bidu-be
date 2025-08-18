@@ -51,14 +51,17 @@ public class ProductController {
                 productService.createProduct(productRequest));
     }
 
+
     @PutMapping( value = "/update/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
    public ResponseData<Boolean> updateProduct(@PathVariable int id,@RequestPart("productRequest") ProductRequest productRequest, @RequestPart("images") List<MultipartFile> images){
 
        productRequest.setThumbnail(cloudinaryService.getUrlFile(images, CloudPath.PRODUCT));
 
+  
        return new ResponseData<>(HttpStatus.OK.value(),"Product retrieved successfully",
                productService.updateProduct(id, productRequest));
    }
+
 
     @DeleteMapping("/delete/{id}")
     public ResponseData<Boolean> deleteProduct(@PathVariable int id){
