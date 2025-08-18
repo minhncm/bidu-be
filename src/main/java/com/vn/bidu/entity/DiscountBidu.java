@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+import java.util.Set;
+
 @Entity
 @Getter
 @Setter
@@ -31,7 +34,6 @@ public class DiscountBidu {
     @Column(name = "description_discount")
     private String descriptionDiscount;
 
-    @ManyToOne
-    @JoinColumn(name= "id_product", insertable = false, updatable = false)
-    private Product product;
+    @ManyToMany(mappedBy = "discounts")
+    private List<Product> products;
 }

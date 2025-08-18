@@ -29,6 +29,6 @@ public class Variant {
 
 
     @ManyToOne
-    @JoinColumn(name = "id_product" , insertable = false, updatable = false)
+    @JoinColumn(name = "id_product")
     private Product product;
 }

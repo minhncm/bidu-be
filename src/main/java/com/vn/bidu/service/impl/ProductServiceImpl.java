@@ -9,30 +9,33 @@ import com.vn.bidu.entity.DiscountBidu;
 import com.vn.bidu.entity.Product;
 import com.vn.bidu.entity.Variant;
 import com.vn.bidu.mapper.ProductMapper;
+import com.vn.bidu.mapper.VariantMapper;
 import com.vn.bidu.repository.DiscountRepository;
 import com.vn.bidu.repository.ProductRepository;
+import com.vn.bidu.repository.VariantRepository;
 import com.vn.bidu.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
-
     private final DiscountRepository discountRepository;
+    private final ProductMapper productMapper;
+    private final VariantRepository variantRepository;
+    private final VariantMapper variantMapper;
+
     @Autowired
     private ProductConverter productConverter;
 
     @Autowired
     private VariantConverter variantConverter;
-
-    @Autowired
-    private ProductMapper productMapper;
 
     @Override
     public List<ProductResponse> getAllProduct() {
@@ -54,36 +57,38 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public boolean updateProduct(int id, ProductRequest productRequest) {
         try {
-            Optional<Product> product = productRepository.findById(id);
-            Set<DiscountBidu> discountBidus = new HashSet<>();
+            Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
+            productMapper.toProductEntity(productRequest, product);
+
+            if(productRequest.getDiscountIds() != null) {
+                product.getDiscounts().clear();
+                List<DiscountBidu> discounts = discountRepository.findAllById(productRequest.getDiscountIds());
+                product.getDiscounts().addAll(discounts);
+            }
+
             Set<Variant> variants = new HashSet<>();
-
-            for(int discountId : productRequest.getDiscountIds()) {
-                DiscountBidu discountBidu = discountRepository.findById(discountId).orElseThrow(() -> new RuntimeException("Discount not found"));
-                discountBidus.add(discountBidu);
+            if(productRequest.getVariants() != null) {
+                for (VariantRequest variantRequest : productRequest.getVariants()) {
+                    Variant variant;
+                    if (variantRequest.getId() != null) {
+                        variant = variantRepository.findById(variantRequest.getId())
+                                .orElseThrow(() -> new RuntimeException("Variant not found"));
+                    } else {
+                        variant = new Variant();
+                        variant.setProduct(product);
+                    }
+                    variantMapper.toVariantEntity(variantRequest, variant);
+                    variants.add(variant);
+                }
+                product.getVariants().clear();
+                product.getVariants().addAll(variants);
             }
-            for(VariantRequest variantRequest : productRequest.getVariants() ){
-                Variant variant = variantConverter.toVariantEntity(variantRequest);
-                variants.add(variant);
-            }
-            if(product.isPresent()){
-//                Product newProduct =  productConverter.toProductEntity(productRequest, product.get(),discountBidus, variants );
-                productMapper.toProductEntity(productRequest,product.get() );
-                productRepository.save(product.get());
-
-                return true;
-
-            }
-
-
-
-
+            productRepository.save(product);
+            return true;
 
         } catch (Exception e) {
-            throw new RuntimeException("Product not found");
-
+            throw new RuntimeException(e.getMessage());
         }
-        return false;
     }
 
     @Override
@@ -97,7 +102,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public boolean createProduct( ProductRequest productRequest) {
+    public boolean createProduct(ProductRequest productRequest) {
         try {
             Set<DiscountBidu> discountBidus = new HashSet<>();
             Set<Variant> variants = new HashSet<>();

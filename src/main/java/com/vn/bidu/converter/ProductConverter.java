@@ -2,7 +2,6 @@ package com.vn.bidu.converter;
 
 import com.vn.bidu.dto.request.ProductRequest;
 import com.vn.bidu.dto.response.ProductResponse;
-import com.vn.bidu.dto.response.ShopResponse;
 import com.vn.bidu.entity.DiscountBidu;
 import com.vn.bidu.entity.Product;
 import com.vn.bidu.entity.Variant;
@@ -11,9 +10,7 @@ import com.vn.bidu.utils.NumberFormatUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @Component
@@ -25,8 +22,8 @@ public class ProductConverter {
 
         mapper.map(productRequest, product);
 
-        product.setListDiscount(discountBidus);
-        product.setListVariant(variants);
+        product.setDiscounts(discountBidus);
+        product.setVariants(variants);
 
         return product;
     }

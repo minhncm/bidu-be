@@ -30,6 +30,6 @@ public class ProductResponse implements Serializable  {
     private String brand;
     private int rating;
     private ShopResponse shop;
-    private List<DiscountBiduResponse> discount;
-    private List<VariantResponse> listVariant;
+    private List<DiscountBiduResponse> discounts;
+    private List<VariantResponse> variants;
 }
