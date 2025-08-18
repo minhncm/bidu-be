@@ -21,7 +21,6 @@ public class ProductConverter {
     @Autowired
     private ModelMapper mapper;
 
-
     public Product toProductEntity(ProductRequest productRequest, Product product, Set<DiscountBidu> discountBidus, Set<Variant> variants){
 
         mapper.map(productRequest, product);

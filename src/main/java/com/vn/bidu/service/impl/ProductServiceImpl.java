@@ -1,6 +1,5 @@
 package com.vn.bidu.service.impl;
 
-import com.vn.bidu.converter.CategoryConverter;
 import com.vn.bidu.converter.ProductConverter;
 import com.vn.bidu.converter.VariantConverter;
 import com.vn.bidu.dto.request.ProductRequest;
@@ -9,6 +8,7 @@ import com.vn.bidu.dto.response.ProductResponse;
 import com.vn.bidu.entity.DiscountBidu;
 import com.vn.bidu.entity.Product;
 import com.vn.bidu.entity.Variant;
+import com.vn.bidu.mapper.ProductMapper;
 import com.vn.bidu.repository.DiscountRepository;
 import com.vn.bidu.repository.ProductRepository;
 import com.vn.bidu.service.ProductService;
@@ -31,6 +31,9 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private VariantConverter variantConverter;
 
+    @Autowired
+    private ProductMapper productMapper;
+
     @Override
     public List<ProductResponse> getAllProduct() {
         List<Product> products = productRepository.findAll();
@@ -52,26 +55,28 @@ public class ProductServiceImpl implements ProductService {
     public boolean updateProduct(int id, ProductRequest productRequest) {
         try {
             Optional<Product> product = productRepository.findById(id);
-
             Set<DiscountBidu> discountBidus = new HashSet<>();
             Set<Variant> variants = new HashSet<>();
 
             for(int discountId : productRequest.getDiscountIds()) {
-
                 DiscountBidu discountBidu = discountRepository.findById(discountId).orElseThrow(() -> new RuntimeException("Discount not found"));
                 discountBidus.add(discountBidu);
             }
-
             for(VariantRequest variantRequest : productRequest.getVariants() ){
                 Variant variant = variantConverter.toVariantEntity(variantRequest);
                 variants.add(variant);
             }
-
             if(product.isPresent()){
-                Product newProduct =  productConverter.toProductEntity(productRequest, product.get(),discountBidus, variants );
-                productRepository.save(newProduct);
+//                Product newProduct =  productConverter.toProductEntity(productRequest, product.get(),discountBidus, variants );
+                productMapper.toProductEntity(productRequest,product.get() );
+                productRepository.save(product.get());
+
                 return true;
+
             }
+
+
+
 
 
         } catch (Exception e) {
@@ -101,7 +106,6 @@ public class ProductServiceImpl implements ProductService {
                         .orElseThrow(() -> new RuntimeException("Discount not found"));
                 discountBidus.add(discountBidu);
             }
-
             for(VariantRequest variantRequest : productRequest.getVariants() ){
                 Variant variant = variantConverter.toVariantEntity(variantRequest);
                 variants.add(variant);
