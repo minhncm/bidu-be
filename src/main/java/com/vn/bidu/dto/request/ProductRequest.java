@@ -14,7 +14,6 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 public class ProductRequest {
-
     private String nameProduct;
     private String thumbnail;
     private int price;
@@ -32,6 +31,4 @@ public class ProductRequest {
     private String brand;
     private Set<VariantRequest> variants;
     private List<Integer> discountIds;
-
-
 }

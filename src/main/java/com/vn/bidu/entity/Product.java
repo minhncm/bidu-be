@@ -64,8 +64,11 @@ public class Product {
     @Column(name="brand")
     private String brand;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private Set<DiscountBidu> listDiscount;
+    @ManyToMany
+    @JoinTable(name = "product_discount_bidu",
+            joinColumns = @JoinColumn(name = "id_product"),
+            inverseJoinColumns = @JoinColumn(name = "id_discount_bidu"))
+    private Set<DiscountBidu> discounts;
 
     @ManyToOne
     @JoinColumn(name = "id_shop" , insertable = false, updatable = false)
@@ -75,10 +78,10 @@ public class Product {
     @JoinColumn(name = "id_category" , insertable = false, updatable = false)
     private Category category;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private Set<Variant> listVariant;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Variant> variants;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private Set<OrderDetail> listOrderDetail;
+    private Set<OrderDetail> orderDetails;
 
 }

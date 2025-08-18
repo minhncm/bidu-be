@@ -8,6 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class VariantRequest {
+    private Integer id;
     private String color;
     private String size;
     private int inventory;
