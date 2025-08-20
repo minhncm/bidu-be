@@ -42,7 +42,7 @@ public class CloudinaryServiceImpl implements CloudinaryService {
     }
 
     @Override
-    public String getUrlFile(List<MultipartFile> files, String path) {
+    public String getUrlListFile(List<MultipartFile> files, String path) {
         List<String> urls = new ArrayList<>();
         for (MultipartFile file : files) {
             Map cloud = uploadFile(file, path);

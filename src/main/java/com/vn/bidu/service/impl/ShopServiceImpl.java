@@ -1,10 +1,12 @@
 package com.vn.bidu.service.impl;
 
+import com.vn.bidu.constant.CloudPath;
 import com.vn.bidu.converter.ShopConverter;
 import com.vn.bidu.dto.request.ShopRequest;
 import com.vn.bidu.dto.response.ShopResponse;
 import com.vn.bidu.entity.Shop;
 import com.vn.bidu.repository.ShopRepository;
+import com.vn.bidu.service.CloudinaryService;
 import com.vn.bidu.service.ShopService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -19,6 +22,7 @@ import java.util.Optional;
 public class ShopServiceImpl implements ShopService {
 
     private final ShopRepository shopRepository;
+    private final CloudinaryService cloudinaryService;
 
     @Autowired
     private ShopConverter shopConverter;
@@ -40,22 +44,20 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public boolean addShop(ShopRequest shopRequest) {
+    public ShopResponse addShop(ShopRequest shopRequest) {
         try {
-            Shop shop = Shop.builder()
-                    .nameShop(shopRequest.getNameShop())
-                    .email(shopRequest.getEmail())
-                    .phoneNumber(shopRequest.getPhoneNumber())
-                    .avatar(shopRequest.getAvatar())
-                    .thumbnail(shopRequest.getThumbnail())
-                    .location(shopRequest.getLocation()).build();
-            shopRepository.save(shop);
-            return true;
+            Map thumbnail = cloudinaryService.uploadFile(shopRequest.getThumbnail(), CloudPath.SHOP);
+            Map avatar = cloudinaryService.uploadFile(shopRequest.getAvatar(), CloudPath.SHOP);
 
+            Shop shop = shopConverter.toShopEntity(shopRequest);
+            shop.setAvatar(avatar.get("url").toString());
+            shop.setThumbnail(thumbnail.get("url").toString());
+
+            shopRepository.save(shop);
+            return shopConverter.toShopDTO(shop);
         } catch (Exception e) {
             throw new RuntimeException("Add shop failure");
         }
-
     }
 
     @Override

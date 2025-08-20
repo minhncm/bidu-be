@@ -7,5 +7,5 @@ import java.util.Map;
 public interface CloudinaryService {
     Map uploadFile(MultipartFile file, String folderName);
     Map uploadVideo(MultipartFile file, String folderName);
-    String getUrlFile(List<MultipartFile> files, String path);
+    String getUrlListFile(List<MultipartFile> files, String path);
 }

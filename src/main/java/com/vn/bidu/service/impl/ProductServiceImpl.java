@@ -1,5 +1,6 @@
 package com.vn.bidu.service.impl;
 
+import com.vn.bidu.constant.CloudPath;
 import com.vn.bidu.converter.ProductConverter;
 import com.vn.bidu.converter.VariantConverter;
 import com.vn.bidu.dto.request.ProductRequest;
@@ -12,14 +13,14 @@ import com.vn.bidu.entity.Variant;
 import com.vn.bidu.repository.DiscountRepository;
 import com.vn.bidu.repository.ProductRepository;
 import com.vn.bidu.repository.VariantRepository;
+import com.vn.bidu.service.CloudinaryService;
 import com.vn.bidu.service.ProductService;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,10 +29,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final DiscountRepository discountRepository;
     private final VariantRepository variantRepository;
-
-
-    @Autowired
-    private ModelMapper mapper;
+    private final CloudinaryService cloudinaryService;
 
     @Autowired
     private ProductConverter productConverter;
@@ -57,11 +55,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public boolean updateProduct(int id, ProductRequest productRequest) {
+    public boolean updateProduct(int id, ProductRequest productRequest, List<MultipartFile> images) {
         try{
             Product product = productRepository.findById(id).orElseThrow(
                     () -> new RuntimeException("Product not found"));
-                 Product newProduct =   productConverter.toProductEntity(productRequest, product);
+
+            Product newProduct = productConverter.toProductEntity(productRequest, product);
+            newProduct.setThumbnail(cloudinaryService.getUrlListFile(images, CloudPath.PRODUCT));
+
             if(productRequest.getDiscountIds() != null && !productRequest.getDiscountIds().isEmpty()  ){
                 Set<DiscountBidu> discountBiduSet = new HashSet<>();
                 for(int idDiscount : productRequest.getDiscountIds()){
@@ -112,9 +113,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public boolean createProduct(ProductRequest productRequest) {
+    public boolean createProduct(ProductRequest productRequest, List<MultipartFile> images) {
         try {
             Product product = productConverter.toProductEntity(productRequest, new Product());
+            product.setThumbnail(cloudinaryService.getUrlListFile(images, CloudPath.PRODUCT));
+
             if (productRequest.getDiscountIds() != null && !productRequest.getDiscountIds().isEmpty()) {
                 Set<DiscountBidu> discountBidus = new HashSet<>();
                 for (int discountId : productRequest.getDiscountIds()) {

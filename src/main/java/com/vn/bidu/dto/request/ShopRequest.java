@@ -2,6 +2,7 @@ package com.vn.bidu.dto.request;
 
 
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -10,8 +11,8 @@ import lombok.*;
 @Builder
 public class ShopRequest {
     private String nameShop;
-    private String avatar;
-    private String thumbnail;
+    private MultipartFile avatar;
+    private MultipartFile thumbnail;
     private String email;
     private String phoneNumber;
     private String location;
