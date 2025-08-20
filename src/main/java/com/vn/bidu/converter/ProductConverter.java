@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Set;
 
 @Component
@@ -18,15 +19,17 @@ public class ProductConverter {
     @Autowired
     private ModelMapper mapper;
 
-    public Product toProductEntity(ProductRequest productRequest, Product product, Set<DiscountBidu> discountBidus, Set<Variant> variants){
+    public Product toProductEntity(ProductRequest productRequest, Product product){
+        mapper.typeMap(ProductRequest.class, Product.class)
+                .addMappings(m -> {
+                    m.skip(Product::setVariants);
+                    m.skip(Product::setDiscounts);
+                });
 
         mapper.map(productRequest, product);
-
-        product.setDiscounts(discountBidus);
-        product.setVariants(variants);
-
         return product;
     }
+
 
     public ProductResponse toProductResponse(Product product) {
         ProductResponse productResponse = mapper.map(product, ProductResponse.class);

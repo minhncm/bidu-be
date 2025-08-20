@@ -3,7 +3,11 @@ package com.vn.bidu.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -68,7 +72,7 @@ public class Product {
     @JoinTable(name = "product_discount_bidu",
             joinColumns = @JoinColumn(name = "id_product"),
             inverseJoinColumns = @JoinColumn(name = "id_discount_bidu"))
-    private Set<DiscountBidu> discounts;
+    private Set<DiscountBidu> discounts =new HashSet<>() ;
 
     @ManyToOne
     @JoinColumn(name = "id_shop" , insertable = false, updatable = false)
@@ -78,8 +82,8 @@ public class Product {
     @JoinColumn(name = "id_category" , insertable = false, updatable = false)
     private Category category;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Variant> variants;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL ,orphanRemoval = true)
+    private Set<Variant> variants = new HashSet<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<OrderDetail> orderDetails;
