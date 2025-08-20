@@ -8,13 +8,13 @@ import com.vn.bidu.dto.response.ProductResponse;
 import com.vn.bidu.entity.DiscountBidu;
 import com.vn.bidu.entity.Product;
 import com.vn.bidu.entity.Variant;
-import com.vn.bidu.mapper.ProductMapper;
-import com.vn.bidu.mapper.VariantMapper;
+
 import com.vn.bidu.repository.DiscountRepository;
 import com.vn.bidu.repository.ProductRepository;
 import com.vn.bidu.repository.VariantRepository;
 import com.vn.bidu.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,9 +27,11 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final DiscountRepository discountRepository;
-    private final ProductMapper productMapper;
     private final VariantRepository variantRepository;
-    private final VariantMapper variantMapper;
+
+
+    @Autowired
+    private ModelMapper mapper;
 
     @Autowired
     private ProductConverter productConverter;
@@ -56,38 +58,46 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public boolean updateProduct(int id, ProductRequest productRequest) {
-        try {
-            Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
-            productMapper.toProductEntity(productRequest, product);
-
-            if(productRequest.getDiscountIds() != null) {
-                product.getDiscounts().clear();
-                List<DiscountBidu> discounts = discountRepository.findAllById(productRequest.getDiscountIds());
-                product.getDiscounts().addAll(discounts);
-            }
-
-            Set<Variant> variants = new HashSet<>();
-            if(productRequest.getVariants() != null) {
-                for (VariantRequest variantRequest : productRequest.getVariants()) {
-                    Variant variant;
-                    if (variantRequest.getId() != null) {
-                        variant = variantRepository.findById(variantRequest.getId())
-                                .orElseThrow(() -> new RuntimeException("Variant not found"));
-                    } else {
-                        variant = new Variant();
-                        variant.setProduct(product);
-                    }
-                    variantMapper.toVariantEntity(variantRequest, variant);
-                    variants.add(variant);
+        try{
+            Product product = productRepository.findById(id).orElseThrow(
+                    () -> new RuntimeException("Product not found"));
+                 Product newProduct =   productConverter.toProductEntity(productRequest, product);
+            if(productRequest.getDiscountIds() != null && !productRequest.getDiscountIds().isEmpty()  ){
+                Set<DiscountBidu> discountBiduSet = new HashSet<>();
+                for(int idDiscount : productRequest.getDiscountIds()){
+                    DiscountBidu discountBidu = discountRepository.findById(idDiscount).orElseThrow(
+                            () -> new RuntimeException("Discount not found")
+                    );
+                    discountBiduSet.add(discountBidu);
                 }
-                product.getVariants().clear();
-                product.getVariants().addAll(variants);
+                newProduct.getDiscounts().clear();
+                newProduct.getDiscounts().addAll(discountBiduSet);
             }
-            productRepository.save(product);
-            return true;
+            if(productRequest.getVariants() != null && !productRequest.getVariants().isEmpty()){
+               Set<Variant> variantSet = new HashSet<>();
+               for(VariantRequest variantRequest : productRequest.getVariants() ){
+                   Variant variant ;
+                   if(variantRequest.getId() == null ){
+                       variant = variantConverter.toVariantEntity(variantRequest);
+                       variant.setProduct(newProduct);
+                   }
+                   else{
+                       variant = variantRepository.findById(variantRequest.getId()).orElseThrow(
+                               () -> new RuntimeException("Variant not found")
+                       );
+                       variantConverter.toVariantEntity(variantRequest,variant);
+                   }
+                   variantSet.add(variant);
 
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+               }
+               newProduct.getVariants().clear();
+               newProduct.getVariants().addAll(variantSet);
+            }
+            productRepository.save(newProduct);
+            return true;
+        }
+        catch(Exception e){
+            return false;
         }
     }
 
@@ -104,23 +114,31 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public boolean createProduct(ProductRequest productRequest) {
         try {
-            Set<DiscountBidu> discountBidus = new HashSet<>();
-            Set<Variant> variants = new HashSet<>();
-            for(int discountId : productRequest.getDiscountIds()) {
-                DiscountBidu discountBidu = discountRepository.findById(discountId)
-                        .orElseThrow(() -> new RuntimeException("Discount not found"));
-                discountBidus.add(discountBidu);
+            Product product = productConverter.toProductEntity(productRequest, new Product());
+            if (productRequest.getDiscountIds() != null && !productRequest.getDiscountIds().isEmpty()) {
+                Set<DiscountBidu> discountBidus = new HashSet<>();
+                for (int discountId : productRequest.getDiscountIds()) {
+                    DiscountBidu discountBidu = discountRepository.findById(discountId)
+                            .orElseThrow(() -> new RuntimeException("Discount not found"));
+                    discountBidus.add(discountBidu);
+                }
+                product.setDiscounts(discountBidus);
             }
-            for(VariantRequest variantRequest : productRequest.getVariants() ){
-                Variant variant = variantConverter.toVariantEntity(variantRequest);
-                variants.add(variant);
+
+            if (productRequest.getVariants() != null && !productRequest.getVariants().isEmpty()) {
+                Set<Variant> variants = new HashSet<>();
+                for (VariantRequest variantRequest : productRequest.getVariants()) {
+                    Variant variant = variantConverter.toVariantEntity(variantRequest);
+                    variant.setProduct(product);
+                    variants.add(variant);
+                }
+                product.setVariants(variants);
             }
-                Product product = productConverter.toProductEntity(productRequest, new Product(),discountBidus,variants);
-                productRepository.save(product);
-                return true;
+
+            productRepository.save(product);
+            return true;
             } catch(Exception e){
-                e.printStackTrace();
-                return false;
+                throw new RuntimeException("Product creation failed");
             }
         }
 

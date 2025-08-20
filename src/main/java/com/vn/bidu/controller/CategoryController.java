@@ -20,19 +20,19 @@ public class CategoryController {
     @GetMapping()
     public ResponseData<List<CategoryResponse>> getAllCategory(){
 
-        return new ResponseData<List<CategoryResponse>>(HttpStatus.OK.value(),"Category retrieved successfully",  categoryService.getAllCategory() );
+        return new ResponseData<>(HttpStatus.OK.value(),"Category retrieved successfully",  categoryService.getAllCategory() );
     }
 
 
     @GetMapping("/{id}")
     public ResponseData<CategoryResponse> getCategoryById(@PathVariable int id) {
-        return new ResponseData<CategoryResponse>(HttpStatus.OK.value(),"Category retrieved successfully",  categoryService.getById(id) );
+        return new ResponseData<>(HttpStatus.OK.value(),"Category retrieved successfully", categoryService.getById(id) );
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseData<Boolean> deleteCategory(@PathVariable int id) {
         categoryService.deleteCategory(id);
-        return new ResponseData<Boolean>(HttpStatus.OK.value(),"Delete success",  true );
+        return new ResponseData<>(HttpStatus.OK.value(),"Delete success",  true );
     }
 
 }

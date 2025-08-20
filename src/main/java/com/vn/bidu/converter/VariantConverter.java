@@ -13,7 +13,11 @@ public class VariantConverter {
     private ModelMapper mapper;
 
     public Variant toVariantEntity(VariantRequest variantRequest) {
-        return mapper.map(variantRequest, Variant.class);
+      return   mapper.map(variantRequest, Variant.class);
+
+    }
+    public void toVariantEntity(VariantRequest variantRequest,Variant variant) {
+        mapper.map(variantRequest, variant);
     }
 
     public VariantResponse toVariantResponse(Variant variant) {

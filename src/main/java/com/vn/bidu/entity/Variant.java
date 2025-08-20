@@ -27,8 +27,8 @@ public class Variant {
     @Column(name= "inventory")
     private int inventory;
 
-
     @ManyToOne
     @JoinColumn(name = "id_product")
     private Product product;
+
 }
