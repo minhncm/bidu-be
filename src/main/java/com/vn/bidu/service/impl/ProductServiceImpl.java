@@ -10,6 +10,10 @@ import com.vn.bidu.entity.DiscountBidu;
 import com.vn.bidu.entity.Product;
 import com.vn.bidu.entity.Variant;
 
+import com.vn.bidu.exception.DiscountException;
+import com.vn.bidu.exception.ErrorCode;
+import com.vn.bidu.exception.ProductException;
+import com.vn.bidu.exception.VariantException;
 import com.vn.bidu.repository.DiscountRepository;
 import com.vn.bidu.repository.ProductRepository;
 import com.vn.bidu.repository.VariantRepository;
@@ -50,7 +54,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponse getProductById(int id) {
-        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
+        Product product = productRepository.findById(id).orElseThrow(() -> new ProductException(ErrorCode.PRODUCT_NOT_FOUND));
         return productConverter.toProductResponse(product);
     }
 
@@ -58,7 +62,7 @@ public class ProductServiceImpl implements ProductService {
     public boolean updateProduct(int id, ProductRequest productRequest, List<MultipartFile> images) {
         try{
             Product product = productRepository.findById(id).orElseThrow(
-                    () -> new RuntimeException("Product not found"));
+                    () -> new ProductException(ErrorCode.PRODUCT_NOT_FOUND));
 
             Product newProduct = productConverter.toProductEntity(productRequest, product);
             newProduct.setThumbnail(cloudinaryService.getUrlListFile(images, CloudPath.PRODUCT));
@@ -67,7 +71,7 @@ public class ProductServiceImpl implements ProductService {
                 Set<DiscountBidu> discountBiduSet = new HashSet<>();
                 for(int idDiscount : productRequest.getDiscountIds()){
                     DiscountBidu discountBidu = discountRepository.findById(idDiscount).orElseThrow(
-                            () -> new RuntimeException("Discount not found")
+                            () -> new DiscountException(ErrorCode.DISCOUNT_NOT_FOUND)
                     );
                     discountBiduSet.add(discountBidu);
                 }
@@ -84,7 +88,7 @@ public class ProductServiceImpl implements ProductService {
                    }
                    else{
                        variant = variantRepository.findById(variantRequest.getId()).orElseThrow(
-                               () -> new RuntimeException("Variant not found")
+                               () -> new VariantException(ErrorCode.VARIANT_NOT_FOUND)
                        );
                        variantConverter.toVariantEntity(variantRequest,variant);
                    }
@@ -108,7 +112,7 @@ public class ProductServiceImpl implements ProductService {
         if(product.isPresent()){
             productRepository.deleteById(id);
         }else{
-            throw new RuntimeException("Product not found");
+            throw new ProductException(ErrorCode.PRODUCT_NOT_FOUND);
         }
     }
 
@@ -122,7 +126,7 @@ public class ProductServiceImpl implements ProductService {
                 Set<DiscountBidu> discountBidus = new HashSet<>();
                 for (int discountId : productRequest.getDiscountIds()) {
                     DiscountBidu discountBidu = discountRepository.findById(discountId)
-                            .orElseThrow(() -> new RuntimeException("Discount not found"));
+                            .orElseThrow(() -> new DiscountException(ErrorCode.DISCOUNT_NOT_FOUND));
                     discountBidus.add(discountBidu);
                 }
                 product.setDiscounts(discountBidus);
@@ -141,7 +145,7 @@ public class ProductServiceImpl implements ProductService {
             productRepository.save(product);
             return true;
             } catch(Exception e){
-                throw new RuntimeException("Product creation failed");
+                throw new ProductException(ErrorCode.PRODUCT_CREATE_FAILURE);
             }
         }
 

@@ -46,7 +46,7 @@ public class ProductController {
     public ResponseData<Boolean> createProduct(@RequestPart("productRequest") ProductRequest productRequest,
                                                @RequestPart("images") List<MultipartFile> images) {
 
-        return new ResponseData<>(HttpStatus.OK.value(),"Product add successfully",
+        return new ResponseData<>(HttpStatus.CREATED.value(),"Product add successfully",
                 productService.createProduct(productRequest, images));
     }
 

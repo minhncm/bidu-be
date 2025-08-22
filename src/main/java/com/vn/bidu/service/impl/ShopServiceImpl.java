@@ -5,6 +5,8 @@ import com.vn.bidu.converter.ShopConverter;
 import com.vn.bidu.dto.request.ShopRequest;
 import com.vn.bidu.dto.response.ShopResponse;
 import com.vn.bidu.entity.Shop;
+import com.vn.bidu.exception.ErrorCode;
+import com.vn.bidu.exception.ShopException;
 import com.vn.bidu.repository.ShopRepository;
 import com.vn.bidu.service.CloudinaryService;
 import com.vn.bidu.service.ShopService;
@@ -39,7 +41,7 @@ public class ShopServiceImpl implements ShopService {
 
     @Override
     public ShopResponse getShopById(int id) {
-        Shop shop = shopRepository.findById(id).orElseThrow(() -> new RuntimeException("Shop not found"));
+        Shop shop = shopRepository.findById(id).orElseThrow(() -> new ShopException(ErrorCode.SHOP_NOT_FOUND));
         return shopConverter.toShopDTO(shop);
     }
 
@@ -56,7 +58,7 @@ public class ShopServiceImpl implements ShopService {
             shopRepository.save(shop);
             return shopConverter.toShopDTO(shop);
         } catch (Exception e) {
-            throw new RuntimeException("Add shop failure");
+            throw new ShopException(ErrorCode.SHOP_ADDED_FAILURE);
         }
     }
 
@@ -67,7 +69,7 @@ public class ShopServiceImpl implements ShopService {
            shopRepository.deleteById(id);
        }
        else{
-           throw new RuntimeException("Shop not found");
+           throw new ShopException(ErrorCode.SHOP_NOT_FOUND);
        }
 
     }
