@@ -53,7 +53,7 @@ public class ShopController {
                 .location(location).build();
 
         ShopResponse shopResponse = shopService.addShop(shopRequest);
-        return new ResponseData<>(HttpStatus.OK.value(), "Shop added successfully", shopResponse);
+        return new ResponseData<>(HttpStatus.CREATED.value(), "Shop added successfully", shopResponse);
     }
 
     @DeleteMapping("/delete/{id}")
