@@ -3,6 +3,8 @@ package com.vn.bidu.service.impl;
 import com.vn.bidu.converter.VariantConverter;
 import com.vn.bidu.dto.response.VariantResponse;
 import com.vn.bidu.entity.Variant;
+import com.vn.bidu.exception.ErrorCode;
+import com.vn.bidu.exception.VariantException;
 import com.vn.bidu.repository.VariantRepository;
 import com.vn.bidu.service.VariantService;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +37,7 @@ public class VariantServiceImpl implements VariantService {
 
     @Override
     public VariantResponse getVariantById(int id) {
-        Variant variant = variantRepository.findById(id).orElseThrow(() -> new RuntimeException("Size Color not found"));
+        Variant variant = variantRepository.findById(id).orElseThrow(() -> new VariantException(ErrorCode.VARIANT_NOT_FOUND));
         return variantConverter.toVariantResponse(variant);
     }
 }

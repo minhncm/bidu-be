@@ -8,6 +8,6 @@ import java.util.List;
 public interface ShopService {
     List<ShopResponse> getAllShop();
     ShopResponse getShopById(int id);
-    boolean addShop(ShopRequest shopRequest);
+    ShopResponse addShop(ShopRequest shopRequest);
     void deleteShop(int id);
 }

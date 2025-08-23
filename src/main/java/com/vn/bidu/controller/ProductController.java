@@ -30,41 +30,38 @@ public class ProductController {
 
     private final ProductService productService;
 
-    private final CloudinaryService cloudinaryService;
-
     @GetMapping
     public ResponseData<List<ProductResponse>> getAllProduct(){
-        return new ResponseData<>(HttpStatus.OK.value(),"Product retrieved successfully",productService.getAllProduct());
+        return new ResponseData<>(HttpStatus.OK.value(),"Product retrieved successfully",
+                productService.getAllProduct());
     }
 
     @GetMapping("/{id}")    
     public ResponseData<ProductResponse> getProductById(@PathVariable int id) {
-        return new ResponseData<>(HttpStatus.OK.value(),"Product retrieved successfully", productService.getProductById(id));
+        return new ResponseData<>(HttpStatus.OK.value(),"Product retrieved successfully",
+                productService.getProductById(id));
     }
 
-    @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseData<Boolean> createProduct(@RequestPart("productRequest") ProductRequest productRequest,
                                                @RequestPart("images") List<MultipartFile> images) {
 
-        productRequest.setThumbnail(cloudinaryService.getUrlFile(images, CloudPath.PRODUCT));
-
-        return new ResponseData<>(HttpStatus.OK.value(),"Product add successfully",
-                productService.createProduct(productRequest));
+        return new ResponseData<>(HttpStatus.CREATED.value(),"Product add successfully",
+                productService.createProduct(productRequest, images));
     }
 
 
-    @PatchMapping( value = "/update/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-   public ResponseData<Boolean> updateProduct(@PathVariable int id,@RequestPart("productRequest") ProductRequest productRequest,
+    @PatchMapping( value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+   public ResponseData<Boolean> updateProduct(@PathVariable int id,
+                                              @RequestPart("productRequest") ProductRequest productRequest,
                                               @RequestPart("images") List<MultipartFile> images){
 
-       productRequest.setThumbnail(cloudinaryService.getUrlFile(images, CloudPath.PRODUCT));
-
        return new ResponseData<>(HttpStatus.OK.value(),"Product retrieved successfully",
-               productService.updateProduct(id, productRequest));
+               productService.updateProduct(id, productRequest, images));
    }
 
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseData<Boolean> deleteProduct(@PathVariable int id){
         productService.deleteProduct(id);
         return new ResponseData<>(HttpStatus.OK.value(),"Delete success",  true );

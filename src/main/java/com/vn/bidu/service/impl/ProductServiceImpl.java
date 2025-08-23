@@ -1,5 +1,6 @@
 package com.vn.bidu.service.impl;
 
+import com.vn.bidu.constant.CloudPath;
 import com.vn.bidu.converter.ProductConverter;
 import com.vn.bidu.converter.VariantConverter;
 import com.vn.bidu.dto.request.ProductRequest;
@@ -9,17 +10,21 @@ import com.vn.bidu.entity.DiscountBidu;
 import com.vn.bidu.entity.Product;
 import com.vn.bidu.entity.Variant;
 
+import com.vn.bidu.exception.DiscountException;
+import com.vn.bidu.exception.ErrorCode;
+import com.vn.bidu.exception.ProductException;
+import com.vn.bidu.exception.VariantException;
 import com.vn.bidu.repository.DiscountRepository;
 import com.vn.bidu.repository.ProductRepository;
 import com.vn.bidu.repository.VariantRepository;
+import com.vn.bidu.service.CloudinaryService;
 import com.vn.bidu.service.ProductService;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,10 +33,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final DiscountRepository discountRepository;
     private final VariantRepository variantRepository;
-
-
-    @Autowired
-    private ModelMapper mapper;
+    private final CloudinaryService cloudinaryService;
 
     @Autowired
     private ProductConverter productConverter;
@@ -52,21 +54,29 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponse getProductById(int id) {
-        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
+        Product product = productRepository.findById(id).orElseThrow(() -> new ProductException(ErrorCode.PRODUCT_NOT_FOUND));
         return productConverter.toProductResponse(product);
     }
 
     @Override
-    public boolean updateProduct(int id, ProductRequest productRequest) {
+    public boolean updateProduct(int id, ProductRequest productRequest, List<MultipartFile> images) {
         try{
             Product product = productRepository.findById(id).orElseThrow(
+
                     () -> new RuntimeException("Product not found"));
                  Product newProduct =  productConverter.toProductEntity(productRequest, product);
+
+                    () -> new ProductException(ErrorCode.PRODUCT_NOT_FOUND));
+
+            Product newProduct = productConverter.toProductEntity(productRequest, product);
+            newProduct.setThumbnail(cloudinaryService.getUrlListFile(images, CloudPath.PRODUCT));
+
+
             if(productRequest.getDiscountIds() != null && !productRequest.getDiscountIds().isEmpty()  ){
                 Set<DiscountBidu> discountBiduSet = new HashSet<>();
                 for(int idDiscount : productRequest.getDiscountIds()){
                     DiscountBidu discountBidu = discountRepository.findById(idDiscount).orElseThrow(
-                            () -> new RuntimeException("Discount not found")
+                            () -> new DiscountException(ErrorCode.DISCOUNT_NOT_FOUND)
                     );
                     discountBiduSet.add(discountBidu);
                 }
@@ -83,7 +93,7 @@ public class ProductServiceImpl implements ProductService {
                    }
                    else{
                        variant = variantRepository.findById(variantRequest.getId()).orElseThrow(
-                               () -> new RuntimeException("Variant not found")
+                               () -> new VariantException(ErrorCode.VARIANT_NOT_FOUND)
                        );
                        variantConverter.toVariantEntity(variantRequest,variant);
                    }
@@ -107,19 +117,21 @@ public class ProductServiceImpl implements ProductService {
         if(product.isPresent()){
             productRepository.deleteById(id);
         }else{
-            throw new RuntimeException("Product not found");
+            throw new ProductException(ErrorCode.PRODUCT_NOT_FOUND);
         }
     }
 
     @Override
-    public boolean createProduct(ProductRequest productRequest) {
+    public boolean createProduct(ProductRequest productRequest, List<MultipartFile> images) {
         try {
             Product product = productConverter.toProductEntity(productRequest, new Product());
+            product.setThumbnail(cloudinaryService.getUrlListFile(images, CloudPath.PRODUCT));
+
             if (productRequest.getDiscountIds() != null && !productRequest.getDiscountIds().isEmpty()) {
                 Set<DiscountBidu> discountBidus = new HashSet<>();
                 for (int discountId : productRequest.getDiscountIds()) {
                     DiscountBidu discountBidu = discountRepository.findById(discountId)
-                            .orElseThrow(() -> new RuntimeException("Discount not found"));
+                            .orElseThrow(() -> new DiscountException(ErrorCode.DISCOUNT_NOT_FOUND));
                     discountBidus.add(discountBidu);
                 }
                 product.setDiscounts(discountBidus);
@@ -138,7 +150,7 @@ public class ProductServiceImpl implements ProductService {
             productRepository.save(product);
             return true;
             } catch(Exception e){
-                throw new RuntimeException("Product creation failed");
+                throw new ProductException(ErrorCode.PRODUCT_CREATE_FAILURE);
             }
         }
 

@@ -10,7 +10,9 @@ import com.vn.bidu.entity.Shop;
 import com.vn.bidu.service.CloudinaryService;
 import com.vn.bidu.service.ShopService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,42 +26,40 @@ import java.util.Map;
 public class ShopController {
 
     private final ShopService shopService;
-    private final CloudinaryService cloudinaryService;
+
     @GetMapping
     public ResponseData<List<ShopResponse>> getAllShop() {
-        return new ResponseData<List<ShopResponse>>(HttpStatus.OK.value(),"Shop retrieved successfully", shopService.getAllShop());
+        return new ResponseData<>(HttpStatus.OK.value(),"Shop retrieved successfully", shopService.getAllShop());
     }
 
     @GetMapping("/{id}")
     public ResponseData<ShopResponse> getShopById(@PathVariable int id) {
-        return new ResponseData<ShopResponse>(HttpStatus.OK.value(),"Shop retrieved successfully", shopService.getShopById(id));
+        return new ResponseData<>(HttpStatus.OK.value(),"Shop retrieved successfully", shopService.getShopById(id));
     }
 
-    @PostMapping("/add-shop")
-    public ResponseData<Boolean> addShop(@RequestParam("name_shop") String nameShop,
-                                     @RequestParam("avatar") MultipartFile avatar,
-                                     @RequestParam("thumbnail") MultipartFile thumbnail,
-                                     @RequestParam("email") String email,
-                                     @RequestParam("phone_number") String phoneNumber,
-                                     @RequestParam("location") String location){
-
-        Map uploadThumbnail = cloudinaryService.uploadFile(thumbnail, CloudPath.SHOP);
-        Map uploadAvatar = cloudinaryService.uploadFile(avatar, CloudPath.SHOP);
+    @PostMapping
+    public ResponseData<ShopResponse> addShop(@RequestParam("name_shop") String nameShop,
+                                              @RequestParam("avatar") MultipartFile avatar,
+                                              @RequestParam("thumbnail") MultipartFile thumbnail,
+                                              @RequestParam("email") String email,
+                                              @RequestParam("phone_number") String phoneNumber,
+                                              @RequestParam("location") String location){
         ShopRequest shopRequest = ShopRequest.builder()
                 .nameShop(nameShop)
-                .avatar(uploadAvatar.get("url").toString())
-                .thumbnail(uploadThumbnail.get("url").toString())
+                .avatar(avatar)
+                .thumbnail(thumbnail)
                 .email(email)
                 .phoneNumber(phoneNumber)
                 .location(location).build();
 
-        return new ResponseData<>(HttpStatus.OK.value(), "success", shopService.addShop(shopRequest));
+        ShopResponse shopResponse = shopService.addShop(shopRequest);
+        return new ResponseData<>(HttpStatus.CREATED.value(), "Shop added successfully", shopResponse);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseData<Boolean> deleteShop( @PathVariable int id){
+    public ResponseData<Void> deleteShop( @PathVariable int id){
         shopService.deleteShop(id);
-        return new ResponseData<>(HttpStatus.OK.value(),"Delete success", true );
+        return new ResponseData<>(HttpStatus.OK.value(), "Shop deleted successfully");
     }
 
 }
