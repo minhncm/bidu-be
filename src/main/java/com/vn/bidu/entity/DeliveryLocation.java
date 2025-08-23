@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Entity
 @Getter
 @Setter
@@ -25,4 +27,8 @@ public class DeliveryLocation {
     @ManyToOne
     @JoinColumn(name= "id_user", insertable = false, updatable = false)
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "ward_code")
+    private Ward ward;
 }

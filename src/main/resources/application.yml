@@ -6,6 +6,7 @@ spring:
     url: jdbc:mysql://localhost:3306/bidu
     username: root
     password: minh071205
+
   jpa:
     hibernate:
       ddl-auto: update

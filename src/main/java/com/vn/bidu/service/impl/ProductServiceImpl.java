@@ -67,6 +67,7 @@ public class ProductServiceImpl implements ProductService {
             Product newProduct = productConverter.toProductEntity(productRequest, product);
             newProduct.setThumbnail(cloudinaryService.getUrlListFile(images, CloudPath.PRODUCT));
 
+
             if(productRequest.getDiscountIds() != null && !productRequest.getDiscountIds().isEmpty()  ){
                 Set<DiscountBidu> discountBiduSet = new HashSet<>();
                 for(int idDiscount : productRequest.getDiscountIds()){
