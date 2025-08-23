@@ -37,7 +37,7 @@ public class ProductController {
         return new ResponseData<>(HttpStatus.OK.value(),"Product retrieved successfully",productService.getAllProduct());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}")    
     public ResponseData<ProductResponse> getProductById(@PathVariable int id) {
         return new ResponseData<>(HttpStatus.OK.value(),"Product retrieved successfully", productService.getProductById(id));
     }

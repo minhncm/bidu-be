@@ -61,7 +61,7 @@ public class ProductServiceImpl implements ProductService {
         try{
             Product product = productRepository.findById(id).orElseThrow(
                     () -> new RuntimeException("Product not found"));
-                 Product newProduct =   productConverter.toProductEntity(productRequest, product);
+                 Product newProduct =  productConverter.toProductEntity(productRequest, product);
             if(productRequest.getDiscountIds() != null && !productRequest.getDiscountIds().isEmpty()  ){
                 Set<DiscountBidu> discountBiduSet = new HashSet<>();
                 for(int idDiscount : productRequest.getDiscountIds()){
