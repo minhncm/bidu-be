@@ -24,7 +24,7 @@ public class User {
     private int id;
 
     @Column(name = "full_name")
-            private String fullName;
+    private String fullName;
 
     @Column(name = "gender")
     private Gender gender;
