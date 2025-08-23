@@ -62,10 +62,15 @@ public class ProductServiceImpl implements ProductService {
     public boolean updateProduct(int id, ProductRequest productRequest, List<MultipartFile> images) {
         try{
             Product product = productRepository.findById(id).orElseThrow(
+
+                    () -> new RuntimeException("Product not found"));
+                 Product newProduct =  productConverter.toProductEntity(productRequest, product);
+
                     () -> new ProductException(ErrorCode.PRODUCT_NOT_FOUND));
 
             Product newProduct = productConverter.toProductEntity(productRequest, product);
             newProduct.setThumbnail(cloudinaryService.getUrlListFile(images, CloudPath.PRODUCT));
+
 
             if(productRequest.getDiscountIds() != null && !productRequest.getDiscountIds().isEmpty()  ){
                 Set<DiscountBidu> discountBiduSet = new HashSet<>();
