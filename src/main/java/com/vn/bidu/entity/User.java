@@ -26,7 +26,7 @@ public class User {
     private int id;
 
     @Column(name = "full_name")
-            private String fullName;
+    private String fullName;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "gender")
