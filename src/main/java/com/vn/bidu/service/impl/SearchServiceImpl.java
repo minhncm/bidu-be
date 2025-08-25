@@ -15,40 +15,19 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 @RequiredArgsConstructor
 @Service
 public class SearchServiceImpl implements SearchService {
 
     private final ShopRepository shopRepository;
-
     private final ProductRepository productRepository;
-
     private final ShopConverter shopConverter;
-
     private final ProductConverter productConverter;
 
     @Override
-    public SearchResponse search(String name, String type) {
-
-        SearchResponse searchResponse = new SearchResponse();
-        List<Shop> shops = shopRepository.findTop3ByNameShopContaining(name);
-        List<Product> products = productRepository.findTop3ByNameProductContaining(name);
-
-        List<ShopResponse> shopResponses = new ArrayList<>();
-        List<ProductResponse> productResponses = new ArrayList<>();
-
-        for(Shop shop : shops) {
-            ShopResponse shopResponse = shopConverter.toShopDTO(shop);
-            shopResponses.add(shopResponse);
-        }
-
-        for(Product product : products) {
-            ProductResponse productResponse = productConverter.toProductResponse(product);
-            productResponses.add(productResponse);
-        }
-        searchResponse.setShops(shopResponses);
-        searchResponse.setProductResponses(productResponses);
-
-        return searchResponse ;
+    public SearchResponse search(Map<String, Object> params) {
+        return null;
     }
 }
