@@ -62,7 +62,6 @@ public class ProductServiceImpl implements ProductService {
     public boolean updateProduct(int id, ProductRequest productRequest, List<MultipartFile> images) {
         try{
             Product product = productRepository.findById(id).orElseThrow(
-
                     () -> new ProductException(ErrorCode.PRODUCT_NOT_FOUND));
 
             Product newProduct = productConverter.toProductEntity(productRequest, product);

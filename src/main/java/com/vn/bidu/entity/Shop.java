@@ -42,6 +42,10 @@ public class Shop {
     @Column(name = "location")
     private String location;
 
+    @ManyToOne
+    @JoinColumn(name = "ward_code")
+    private Ward ward;
+
     @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL)
     private Set<Product> listProduct;
 }
