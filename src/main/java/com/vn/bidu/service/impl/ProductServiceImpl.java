@@ -63,9 +63,6 @@ public class ProductServiceImpl implements ProductService {
         try{
             Product product = productRepository.findById(id).orElseThrow(
 
-                    () -> new RuntimeException("Product not found"));
-                 Product newProduct =  productConverter.toProductEntity(productRequest, product);
-
                     () -> new ProductException(ErrorCode.PRODUCT_NOT_FOUND));
 
             Product newProduct = productConverter.toProductEntity(productRequest, product);

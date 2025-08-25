@@ -31,6 +31,7 @@ public class SearchServiceImpl implements SearchService {
     public SearchResponse search(String name, String type) {
 
         SearchResponse searchResponse = new SearchResponse();
+
         List<Shop> shops = shopRepository.findTop3ByNameShopContaining(name);
         List<Product> products = productRepository.findTop3ByNameProductContaining(name);
 
