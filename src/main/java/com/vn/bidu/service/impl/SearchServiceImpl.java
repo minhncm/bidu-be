@@ -1,7 +1,9 @@
 package com.vn.bidu.service.impl;
 
 import com.vn.bidu.converter.ProductConverter;
+import com.vn.bidu.converter.ProductFilterConverter;
 import com.vn.bidu.converter.ShopConverter;
+import com.vn.bidu.dto.request.ProductFilterRequest;
 import com.vn.bidu.dto.response.ProductResponse;
 import com.vn.bidu.dto.response.SearchResponse;
 import com.vn.bidu.dto.response.ShopResponse;
@@ -21,13 +23,12 @@ import java.util.Map;
 @Service
 public class SearchServiceImpl implements SearchService {
 
-    private final ShopRepository shopRepository;
-    private final ProductRepository productRepository;
-    private final ShopConverter shopConverter;
-    private final ProductConverter productConverter;
+    private final ProductFilterConverter productFilterConverter;
 
     @Override
     public SearchResponse search(Map<String, Object> params) {
+        ProductFilterRequest request = productFilterConverter.toProductFilterRequest(params);
+
         return null;
     }
 }
