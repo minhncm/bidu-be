@@ -19,7 +19,7 @@ public class ProductFilterConverter {
                 .size(ListUtils.splitString(MapUtils.getObject(params, "size", String.class), ","))
                 .priceFrom(MapUtils.getObject(params, "priceFrom", Long.class))
                 .priceTo(MapUtils.getObject(params, "priceTo", Long.class))
-                .gender(MapUtils.getObject(params, "gender", String.class))
+                .gender(ListUtils.splitString(MapUtils.getObject(params, "gender", String.class), ","))
                 .style(ListUtils.splitString(MapUtils.getObject(params, "style", String.class), ","))
                 .build();
     }

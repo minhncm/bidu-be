@@ -24,16 +24,24 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
         CriteriaQuery<Product> criteriaQuery = criteriaBuilder.createQuery(Product.class);
 
         Root<Product> product = criteriaQuery.from(Product.class);
+        criteriaQuery.select(criteriaBuilder.construct(
+                Product.class,
+                product.get("nameProduct"),
+                product.get("price"),
+                product.get("percent"),
+                product.get("soldQuantity"))
+        );
+
         List<Predicate> predicates = new ArrayList<>();
         if(StringUtils.hasText(request.getKeyword())) {
-            predicates.add(criteriaBuilder.like(product.get("name"), "%" + request.getKeyword() + "%"));
+            predicates.add(criteriaBuilder.like(product.get("nameProduct"), "%" + request.getKeyword() + "%"));
         }
 
         if(!request.getCity().isEmpty()) {
             Join<Product, Shop> shopJoin = product.join("shop");
             Join<Shop, Ward> wardJoin = shopJoin.join("ward");
 
-            CriteriaBuilder.In<String> inClause = criteriaBuilder.in(wardJoin.get("province_code"));
+            CriteriaBuilder.In<String> inClause = criteriaBuilder.in(wardJoin.get("province").get("code"));
             request.getCity().forEach(inClause::value);
             predicates.add(inClause);
         }
@@ -46,10 +54,21 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
 
         if(!request.getGender().isEmpty()){
             CriteriaBuilder.In<String> inClause = criteriaBuilder.in(product.get("gender"));
-            request.getSize().forEach(inClause::value);
+            request.getGender().forEach(inClause::value);
             predicates.add(inClause);
         }
 
-        return null;
+        if(!request.getStyle().isEmpty()){
+            CriteriaBuilder.In<String> inClause = criteriaBuilder.in(product.get("style"));
+            request.getStyle().forEach(inClause::value);
+            predicates.add(inClause);
+        }
+        if (request.getPriceTo() != null && request.getPriceFrom() != null) {
+            predicates.add(criteriaBuilder.between(product.get("price"),
+                    request.getPriceFrom(), request.getPriceTo()));
+        }
+
+        criteriaQuery.where(predicates.toArray(new Predicate[0]));
+        return entityManager.createQuery(criteriaQuery).getResultList();
     }
 }

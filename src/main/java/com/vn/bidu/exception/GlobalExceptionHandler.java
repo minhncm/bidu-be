@@ -13,18 +13,18 @@ import java.util.Date;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleException(Exception e, WebRequest request) {
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setTimestamp(new Date());
-        errorResponse.setPath(request.getDescription(false).replace("uri=", ""));
-        errorResponse.setStatus(INTERNAL_SERVER_ERROR.value());
-        errorResponse.setError(NOT_FOUND.getReasonPhrase());
-        errorResponse.setMessage(e.getMessage());
-
-        return errorResponse;
-    }
+//    @ExceptionHandler(Exception.class)
+//    @ResponseStatus(INTERNAL_SERVER_ERROR)
+//    public ErrorResponse handleException(Exception e, WebRequest request) {
+//        ErrorResponse errorResponse = new ErrorResponse();
+//        errorResponse.setTimestamp(new Date());
+//        errorResponse.setPath(request.getDescription(false).replace("uri=", ""));
+//        errorResponse.setStatus(INTERNAL_SERVER_ERROR.value());
+//        errorResponse.setError(NOT_FOUND.getReasonPhrase());
+//        errorResponse.setMessage(e.getMessage());
+//
+//        return errorResponse;
+//    }
 
     @ExceptionHandler(ShopException.class)
     public ErrorResponse handleShopException(ShopException e, WebRequest request) {

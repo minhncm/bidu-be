@@ -13,6 +13,9 @@ public class NumberFormatUtils {
     }
 
     public static String formatPercentage(double value) {
+        if(value == 0) {
+            return null;
+        }
         DecimalFormat formatter = new DecimalFormat("#.##");
         return formatter.format(value) + "%";
     }

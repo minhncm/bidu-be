@@ -1,11 +1,15 @@
 package com.vn.bidu.entity;
 
 
+import com.vn.bidu.enums.Gender;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.type.SqlTypes;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -62,8 +66,9 @@ public class Product {
     @Column(name="body_shape")
     private String bodyShape;
 
+    @Enumerated(EnumType.STRING)
     @Column(name="gender")
-    private String gender;
+    private Gender gender;
 
     @Column(name="brand")
     private String brand;
@@ -88,4 +93,10 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<OrderDetail> orderDetails;
 
+    public Product(String nameProduct, int price, int percent, int soldQuantity) {
+        this.nameProduct = nameProduct;
+        this.price = price;
+        this.percent = percent;
+        this.soldQuantity = soldQuantity;
+    }
 }
