@@ -15,6 +15,6 @@ public class ProductFilterRequest {
     private List<String> size;
     private Long priceFrom;
     private Long priceTo;
-    private String gender;
+    private List<String> gender;
     private List<String> style;
 }

@@ -7,10 +7,12 @@ import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Setter
 @Getter
 //@JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserResponse {
+public class UserResponse implements Serializable {
     private String fullName;
 
     private String thumbnail;

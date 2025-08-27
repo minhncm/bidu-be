@@ -11,6 +11,7 @@ import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity
@@ -37,6 +38,7 @@ public class User {
 
     @Column(name = "password_user")
     private String password;
+
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role_user")

@@ -14,7 +14,7 @@ public class ShopConverter {
     private ModelMapper mapper;
 
     public Shop toShopEntity(ShopRequest shopRequest) { return mapper.map(shopRequest, Shop.class); }
-    public ShopResponse toShopDTO(Shop shop) {
+    public ShopResponse toShopResponse(Shop shop) {
         return mapper.map(shop, ShopResponse.class);
     }
 }

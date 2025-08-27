@@ -11,6 +11,8 @@ public class SearchResponse {
 
     private List<ShopResponse> shops;
 
+    private List<UserResponse> users;
+
     private List<ProductResponse> productResponses;
 
 

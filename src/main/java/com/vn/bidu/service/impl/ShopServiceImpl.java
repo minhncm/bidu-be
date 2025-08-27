@@ -33,7 +33,7 @@ public class ShopServiceImpl implements ShopService {
         List<Shop> shops = shopRepository.findAll();
         List<ShopResponse> shopResponses = new ArrayList<>();
         for(Shop shop : shops) {
-            ShopResponse shopResponse = shopConverter.toShopDTO(shop);
+            ShopResponse shopResponse = shopConverter.toShopResponse(shop);
             shopResponses.add(shopResponse);
         }
         return shopResponses;
@@ -42,7 +42,7 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public ShopResponse getShopById(int id) {
         Shop shop = shopRepository.findById(id).orElseThrow(() -> new ShopException(ErrorCode.SHOP_NOT_FOUND));
-        return shopConverter.toShopDTO(shop);
+        return shopConverter.toShopResponse(shop);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class ShopServiceImpl implements ShopService {
             shop.setThumbnail(thumbnail.get("url").toString());
 
             shopRepository.save(shop);
-            return shopConverter.toShopDTO(shop);
+            return shopConverter.toShopResponse(shop);
         } catch (Exception e) {
             throw new ShopException(ErrorCode.SHOP_ADDED_FAILURE);
         }
